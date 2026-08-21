@@ -233,7 +233,6 @@ RUN pip --no-cache --no-cache-dir install --break-system-packages \
       python3-protobuf \
       python3-tabulate \
       python3-zmq \
-      python3-vici \
       python3-fastapi \
       python3-pyudev \
       python3-systemd \
@@ -333,7 +332,7 @@ RUN apt-get update && apt-get install -y \
 
 # Install syft binary required for SBOM generation
 RUN cd /tmp && curl -sSfL -o syft.tar.gz \
-      https://cdn.vyos.io/tools/syft_1.44.0_linux_$(dpkg-architecture -qDEB_HOST_ARCH).tar.gz; \
+      https://cdn.vyos.io/tools/syft_1.51.0_linux_$(dpkg-architecture -qDEB_HOST_ARCH).tar.gz; \
       tar --extract --file=syft.tar.gz syft; mv syft /usr/local/bin/
 
 # Allow password-less 'sudo' for all users in group 'sudo'
