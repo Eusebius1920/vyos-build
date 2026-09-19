@@ -541,7 +541,13 @@ DOCUMENTATION_URL="{build_config['documentation_url']}"
         os.makedirs(vyos_data_dir, exist_ok=True)
         with open(os.path.join(vyos_data_dir, 'version.json'), 'w') as f:
             json.dump(version_data, f)
-        with open(os.path.join(vyos_data_dir, 'flavor.json'), 'w') as f:
+        # The flavor data is required by the maintainer scripts of the Debian
+        # packages we install, thus it must be in place before the packages are
+        # installed and not only afterwards
+        vyos_data_dir_early = os.path.join(defaults.CHROOT_INCLUDES_EARLY_DIR,
+                                           "usr/share/vyos")
+        os.makedirs(vyos_data_dir_early, exist_ok=True)
+        with open(os.path.join(vyos_data_dir_early, 'flavor.json'), 'w') as f:
             json.dump(flavor_data, f)
         with open(os.path.join(binary_includes_dir, 'version.json'), 'w') as f:
             json.dump(version_data, f)
@@ -782,6 +788,22 @@ Pin-Priority: 600
         if local_packages:
             for f in local_packages:
                 shutil.copy(f, os.path.join(defaults.LOCAL_PACKAGES_PATH, os.path.basename(f)))
+
+            ## T9277: Debug packages are installed on purpose - placing a .deb into
+            ## packages/ is a deliberate act - but linux-image-*-dbg alone expands to
+            ## ~2.3 GB in the rootfs, so make the cost impossible to miss.
+            debug_packages = [f for f in local_packages
+                              if re.search(r'-dbg(sym)?_', os.path.basename(f))]
+            if debug_packages:
+                print("W: " + "=" * 60)
+                print(f"W: Installing {len(debug_packages)} debug package(s) from packages/:")
+                for f in sorted(debug_packages):
+                    size_mb = os.path.getsize(f) / (1024 * 1024)
+                    print(f"W:   {os.path.basename(f)} ({size_mb:.1f} MB deb)")
+                print("W: Debug symbols expand significantly in the rootfs and will")
+                print("W: noticeably increase the image size. Remove them from packages/")
+                print("W: if this was unintended.")
+                print("W: " + "=" * 60)
 
         ## Build the image
         print("I: Starting image build")

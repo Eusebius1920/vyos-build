@@ -177,7 +177,7 @@ scm_url = "https://github.com/containers/podman"
 #build_cmd = "cd ..; ./build.sh"
 build_cmd = """
 make install.tools
-make podman-release
+make PREFIX=/usr podman-release
 
 tar xf podman-release-$(dpkg --print-architecture).tar.gz
 VERSION=$(ls -d podman-v* | cut -c9-)
@@ -194,5 +194,6 @@ fpm --input-type dir --output-type deb --name podman \
 [dependencies]
 packages = [
     "libseccomp-dev",
-    "libgpgme-dev"
+    "libgpgme-dev",
+    "libsystemd-dev"
 ]

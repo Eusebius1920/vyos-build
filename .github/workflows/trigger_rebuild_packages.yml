@@ -74,6 +74,8 @@ jobs:
               - 'scripts/package-build/node_exporter/**'
             openssl:
               - 'scripts/package-build/openssl/**'
+            openvpn:
+              - 'scripts/package-build/openvpn/**'
             openvpn-otp:
               - 'scripts/package-build/openvpn-otp/**'
             owamp:
@@ -102,6 +104,8 @@ jobs:
               - 'scripts/package-build/unionfs-fuse/**'
             vpp:
               - 'scripts/package-build/vpp/**'
+            vyatta-bash:
+              - 'scripts/package-build/vyatta-bash/**'
             waagent:
               - 'scripts/package-build/waagent/**'
             wide-dhcpv6:
@@ -227,6 +231,10 @@ jobs:
             trigger_build "openssl"
           fi
 
+          if [ "${{ steps.changes.outputs.openvpn }}" == "true" ]; then
+            trigger_build "openvpn"
+          fi
+
           if [ "${{ steps.changes.outputs.openvpn-otp }}" == "true" ]; then
             trigger_build "openvpn-otp"
           fi
@@ -281,6 +289,10 @@ jobs:
 
           if [ "${{ steps.changes.outputs.vpp }}" == "true" ]; then
             trigger_build "vpp"
+          fi
+
+          if [ "${{ steps.changes.outputs.vyatta-bash }}" == "true" ]; then
+            trigger_build "vyatta-bash"
           fi
 
           if [ "${{ steps.changes.outputs.waagent }}" == "true" ]; then
