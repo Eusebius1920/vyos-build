@@ -12,13 +12,13 @@ build_cmd = "build_kernel"
 
 [[packages]]
 name = "linux-firmware"
-commit_id = "20260410"
+commit_id = "20260916"
 scm_url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git"
 build_cmd = "build_linux_firmware"
 
 [[packages]]
 name = "accel-ppp-ng"
-commit_id = "306fff8"
+commit_id = "dd07b23"
 scm_url = "https://github.com/accel-ppp/accel-ppp-ng.git"
 build_cmd = "build_accel_ppp_ng"
 
